@@ -1,7 +1,7 @@
 {
   "author": "Kei Son <hey.calmdown@gmail.com>",
   "name": "confluence",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "dependencies": {
     "xmlrpc": "~1.2.0"
   },

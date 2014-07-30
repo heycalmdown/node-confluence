@@ -1,0 +1,19 @@
+{
+  "author": "Kei Son <hey.calmdown@gmail.com>",
+  "name": "confluence",
+  "version": "0.0.0",
+  "dependencies": {
+    "xmlrpc": "~1.2.0"
+  },
+  "devDependencies": {
+    "mocha": ""
+  },
+  "optionalDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/heycalmdown/node-confluence.git"
+  },
+  "scripts": {
+    "test": "mocha test"
+  }
+}

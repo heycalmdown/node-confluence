@@ -2,10 +2,6 @@ var xmlrpc = require('xmlrpc');
 var util = require('util');
 var config = require('./config');
 
-function printError(err) {
-    console.error(err);
-}
-
 function Long(raw) {
   xmlrpc.CustomType.call(this, raw);
 };
@@ -34,17 +30,3 @@ exports.getPage = function getPage(pageId, callback) {
     if (!token) return callback(new Error('Not Logged-in'));
     client.methodCall('confluence2.getPage', [token, new Long(pageId)], callback);
 };
-
-if (!module.parent) {
-    (function () {
-        exports.connect(config.host, config.port, '/rpc/xmlrpc');
-        exports.login(config.id, config.password, function (err, token) {
-            if (err) return printError(err);
-
-            exports.getPage(17834347, function (err, page) {
-                if (err) return printError(err);
-                console.info(page.title);
-            });
-        });
-    })();
-}

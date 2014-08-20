@@ -6,7 +6,8 @@
     "xmlrpc": "~1.2.0"
   },
   "devDependencies": {
-    "mocha": ""
+    "mocha": "",
+    "supertest": ""
   },
   "optionalDependencies": {},
   "repository": {

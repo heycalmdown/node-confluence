@@ -30,3 +30,15 @@ exports.getPage = function getPage(pageId, callback) {
     if (!token) return callback(new Error('Not Logged-in'));
     client.methodCall('confluence2.getPage', [token, new Long(pageId)], callback);
 };
+
+exports.storePage = function storePage(page, callback) {
+	if (!client) return callback(new Error('Not Connected'));
+	if (!token) return callback(new Error('Not Logged-in'));
+	client.methodCall('confluence2.storePage', [token, page], callback);
+};
+
+exports.updatePage = function updatePage(page, pageUpdateOptions, callback) {
+	if (!client) return callback(new Error('Not Connected'));
+	if (!token) return callback(new Error('Not Logged-in'));
+	client.methodCall('confluence2.updatePage', [token, page, pageUpdateOptions], callback);
+};

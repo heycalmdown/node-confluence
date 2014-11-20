@@ -9,4 +9,4 @@ https://developer.atlassian.com/display/CONFDEV/Remote+Confluence+Methods#Remote
 [travis-image]: https://secure.travis-ci.org/heycalmdown/node-confluence.png?branch=master
 
 [depstat-url]: https://david-dm.org/heycalmdown/node-confluence
-[depstat-image]: https://david-dm.org/heycalmdown/node-confluence
+[depstat-image]: https://david-dm.org/heycalmdown/node-confluence.png

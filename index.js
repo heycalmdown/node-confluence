@@ -30,3 +30,9 @@ exports.getPage = function getPage(pageId, callback) {
     if (!token) return callback(new Error('Not Logged-in'));
     client.methodCall('confluence2.getPage', [token, new Long(pageId)], callback);
 };
+
+exports.getPages = function getPages(spaceKey, callback) {
+    if (!client) return callback(new Error('Not Connected'));
+    if (!token) return callback(new Error('Not Logged-in'));
+    client.methodCall('confluence2.getPages', [token, spaceKey], callback);
+};

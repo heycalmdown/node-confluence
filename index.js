@@ -66,3 +66,45 @@ exports.getPages = function getPages(spaceKey, callback) {
         });
     });
 };
+
+exports.getSpaces = function getSpaces(callback) {
+    return new bluebird(function (res, rej) {
+        res = makeResolve(callback, res);
+        rej = makeReject(callback, rej);
+        if (!client) return rej(new Error('Not Connected'));
+        if (!token) return rej(new Error('Not Logged-in'));
+        client.methodCall('confluence2.getSpaces', [token], function (err, spaces) {
+            if (err) return rej(err);
+            return res(spaces);
+        });
+    });
+};
+
+exports.getSpace = function getSpace(spaceKey, callback) {
+    return new bluebird(function (res, rej) {
+        res = makeResolve(callback, res);
+        rej = makeReject(callback, rej);
+        if (!client) return rej(new Error('Not Connected'));
+        if (!token) return rej(new Error('Not Logged-in'));
+        client.methodCall('confluence2.getSpace', [token, spaceKey], function (err, space) {
+            if (err) return rej(err);
+            return res(space);
+        });
+    });
+};
+
+exports.getSpaceStatus = function getSpaceStatus(spaceKey, callback) {
+    return new bluebird(function (res, rej) {
+        res = makeResolve(callback, res);
+        rej = makeReject(callback, rej);
+        if (!client) return rej(new Error('Not Connected'));
+        if (!token) return rej(new Error('Not Logged-in'));
+        client.methodCall('confluence2.getSpaceStatus', [token, spaceKey], function (err, spaceStatus) {
+            if (err) return rej(err);
+            return res(spaceStatus);
+        });
+    });
+};
+
+// vim: set sts=4 sw=4 ts=8 et:
+

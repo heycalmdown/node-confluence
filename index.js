@@ -54,6 +54,18 @@ exports.getPage = function getPage(pageId, callback) {
     });
 };
 
+exports.getChildren = function getChildren(pageId, callback) {
+  return new bluebird(function (res ,rej) {
+    res = makeResolve(callback, res);
+    rej = makeReject(callback, rej);
+    if (!client) return rej(new Error('Not Connected'));
+    if (!token) return rej(new Error('Not Logged-in'));
+    client.methodCall('confluence2.getChildren', [token, new Long(pageId)], function (err, summaries) {
+      return res(summaries);
+    });
+  });
+};
+
 exports.getPages = function getPages(spaceKey, callback) {
     return new bluebird(function (res, rej) {
         res = makeResolve(callback, res);
@@ -107,4 +119,3 @@ exports.getSpaceStatus = function getSpaceStatus(spaceKey, callback) {
 };
 
 // vim: set sts=4 sw=4 ts=8 et:
-

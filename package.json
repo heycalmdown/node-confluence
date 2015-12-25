@@ -1,13 +1,15 @@
 {
   "author": "Kei Son <hey.calmdown@gmail.com>",
   "name": "confluency",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "dependencies": {
     "bluebird": "^2.9.25",
-    "xmlrpc": "~1.2.0"
+    "superagent": "^1.6.1",
+    "superagent-bluebird-promise": "^2.1.1"
   },
   "devDependencies": {
     "mocha": "",
+    "should": "^8.0.2",
     "supertest": ""
   },
   "optionalDependencies": {},

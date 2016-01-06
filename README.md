@@ -1,6 +1,6 @@
 # node-confluence [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][depstat-image]][depstat-url]
 
-https://developer.atlassian.com/display/CONFDEV/Remote+Confluence+Methods#RemoteConfluenceMethods-Pages
+https://docs.atlassian.com/atlassian-confluence/REST/latest/
 
 [npm-url]: https://npmjs.org/package/node-confluence
 [npm-image]: https://badge.fury.io/js/node-confluence.png

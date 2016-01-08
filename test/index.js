@@ -1,11 +1,11 @@
-var confluency = require('..');
+var Confluency = require('..').default;
 require('should');
+
+// var confluency = new Confluency('http://krconfluence.ea.com:8090', 'kson', '!upfront1oversee');
+var confluency = new Confluency('https://confluence.atlassian.com');
 
 // you need to set the config.js correctly to run this test.
 describe('default', function () {
-  before(function () {
-    confluency.connect('https://confluence.atlassian.com');
-  });
   it('should get a page', function (done) {
     confluency.getPage(139456).then(function (data) {
     }).then(done, done);
@@ -33,12 +33,13 @@ describe('default', function () {
     }).then(done, done);
   });
   it('should get pages in a space', function (done) {
+    this.timeout(20000);
     confluency.getPages('JIRA').then(function (pages) {
       pages.should.be.an.Array();
     }).then(done, done);
   });
   it('should get every pages in a space', function (done) {
-    this.timeout(10000);
+    this.timeout(20000);
     confluency.getPages('JIRA', {all: true, limit: 500}).then(function (pages) {
       pages.should.be.an.Array();
       pages.length.should.greaterThan(1200);

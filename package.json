@@ -1,13 +1,16 @@
 {
   "author": "Kei Son <hey.calmdown@gmail.com>",
   "name": "confluency",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "dependencies": {
     "bluebird": "^2.9.25",
     "superagent": "^1.6.1",
     "superagent-bluebird-promise": "^2.1.1"
   },
+  "main": "lib/index.js",
   "devDependencies": {
+    "babel-cli": "^6.4.0",
+    "babel-preset-es2015": "^6.3.13",
     "mocha": "",
     "should": "^8.0.2",
     "supertest": ""
@@ -18,6 +21,13 @@
     "url": "git://github.com/heycalmdown/node-confluence.git"
   },
   "scripts": {
-    "test": "mocha test"
+    "test": "mocha test",
+    "compile": "babel -d lib/ es6/",
+    "prepublish": "npm run compile"
+  },
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
   }
 }

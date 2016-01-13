@@ -1,8 +1,7 @@
 var Confluency = require('..').default;
 require('should');
 
-// var confluency = new Confluency('http://krconfluence.ea.com:8090', 'kson', '!upfront1oversee');
-var confluency = new Confluency('https://confluence.atlassian.com');
+var confluency = new Confluency(process.env.CONFLUENCE_HOST || 'https://confluence.atlassian.com');
 
 // you need to set the config.js correctly to run this test.
 describe('default', function () {

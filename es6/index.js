@@ -1,9 +1,12 @@
-var Promise = require('bluebird');
-var superagent = require('superagent-bluebird-promise');
+import * as Promise from 'bluebird';
+import * as superagent from 'superagent-bluebird-promise';
+import * as url from 'url';
 
 export default class Confluency {
-  constructor(host, username, password) {
+  constructor({host, context, username, password}) {
     this.host = host;
+    if (context.length && context[0] !== '/') context = '/' + context;
+    this.context = context;
     this.username = username;
     this.password = password;
     this.client = superagent.agent();
@@ -11,18 +14,18 @@ export default class Confluency {
 
 
   getBasicAuth() {
-    let tok = this.username + ':' + this.password;
-    let hash =  new Buffer(tok, 'binary').toString('base64');
+    const tok = this.username + ':' + this.password;
+    const hash =  new Buffer(tok, 'binary').toString('base64');
     return 'Basic ' + hash;
   }
 
 
   GET(uri) {
-    var prefix = '/rest/api';
+    let prefix = '/rest/api';
     if (uri.slice(0, prefix.length) === prefix) {
       prefix = '';
     }
-    let request = this.client.get(this.host + prefix + uri);
+    const request = this.client.get(this.host + this.context + prefix + uri);
     if (this.username && this.password) {
       request.set('Authorization', this.getBasicAuth());
     }
@@ -36,7 +39,7 @@ export default class Confluency {
 
 
   getChildren(pageId) {
-    return Promise.resolve().then(() => this.GET('/content/' + pageId + '/child/page'));
+    return Promise.resolve().then(() => this.GET('/content/' + pageId + '/child/page')).then(body => body.results);
   };
 
 
@@ -54,7 +57,7 @@ export default class Confluency {
     opts = opts || {};
     opts.limit = opts.limit || 25;
     return Promise.resolve().then(() => {
-      var query = '/space/' + spaceKey + '/content/page';
+      const query = '/space/' + spaceKey + '/content/page';
       if (!opts.all) return this.GET(query).then(body => body.results);
       return this._getPagesAll(query + '?limit=' + opts.limit);
     });

@@ -12,8 +12,8 @@
 docker run -d -p 8090:8090 cptactionhank/atlassian-confluence:latest
 ```
 
-[npm-url]: https://npmjs.org/package/node-confluence
-[npm-image]: https://badge.fury.io/js/node-confluence.png
+[npm-url]: https://npmjs.org/package/confluency
+[npm-image]: https://badge.fury.io/js/confluency.png
 
 [travis-url]: http://travis-ci.org/heycalmdown/node-confluence
 [travis-image]: https://secure.travis-ci.org/heycalmdown/node-confluence.png?branch=master

@@ -5,7 +5,7 @@ const host = process.env.CONFLUENCE_HOST || 'https://confluency.atlassian.net';
 const context = process.env.CONFLUENCE_CONTEXT || 'wiki';
 const confluency = new Confluency({ host, context });
 
-xdescribe('default', function () {
+describe('default', function () {
   it('should get a page', function (done) {
     confluency.getPage(1081354).then(data => {
     }).then(done, done);

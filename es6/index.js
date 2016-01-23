@@ -18,6 +18,11 @@ export default class Confluency {
     const hash =  new Buffer(tok, 'binary').toString('base64');
     return 'Basic ' + hash;
   }
+  
+  
+  compositeUri({prefix, uri}) {
+    return this.host + this.context + prefix + uri;
+  }
 
 
   GET(uri) {
@@ -25,7 +30,28 @@ export default class Confluency {
     if (uri.slice(0, prefix.length) === prefix) {
       prefix = '';
     }
-    const request = this.client.get(this.host + this.context + prefix + uri);
+    const request = this.client.get(this.compositeUri({prefix, uri}));
+    if (this.username && this.password) {
+      request.set('Authorization', this.getBasicAuth());
+    }
+    return request.then(data => data.body);
+  }
+
+ 
+  POST(uri, body) {
+    const prefix = '/rest/api';
+    const request = this.client.post(this.compositeUri({prefix, uri}));
+    if (this.username && this.password) {
+      request.set('Authorization', this.getBasicAuth());
+    }
+    request.set('Content-Type', 'application/json');
+    return request.send(body).then(data => data.body); 
+  }
+  
+  
+  DEL(uri) {
+    const prefix = '/rest/api';
+    const request = this.client.del(this.compositeUri({prefix, uri}));
     if (this.username && this.password) {
       request.set('Authorization', this.getBasicAuth());
     }
@@ -88,4 +114,27 @@ export default class Confluency {
     return Promise.resolve().then(() => this.GET('/space/' + spaceKey));
   }
 
+
+  create({space, title, content, parent}) {
+    const body = {
+      type: 'page',
+      title: title,
+      space: {key: space},
+      body: {
+        storage: {
+          value: content,
+          representation: 'storage'
+        }
+      }
+    };
+    if (parent) {
+      body.ancestors = [{id: parent}];
+    }
+    return this.POST('/content', body);
+  }
+  
+
+  del(pageId) {
+    return this.DEL('/content/' + pageId);
+  }
 }

@@ -137,4 +137,23 @@ export default class Confluency {
   del(pageId) {
     return this.DEL('/content/' + pageId);
   }
+
+
+  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e529
+  tagLabel(pageId, label) {
+    return this.POST(`/content/${pageId}/label`, [{prefix: 'global', name: label}]);
+  }
+
+
+  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e504
+  getLabels(pageId) {
+    return this.GET(`/content/${pageId}/label`).then(body => body.results);
+  }
+
+
+  // https://jira.atlassian.com/browse/CRA-561
+  untagLabel(pageId, label) {
+    throw new Error('not yet supported');
+  }
 }
+

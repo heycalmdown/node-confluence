@@ -8,8 +8,8 @@
 # How to test
 
 ```
-$ npm run babeltest # for developers
 $ npm test # for module users 
+$ npm run babeltest # for developers
 ```
 
 [npm-url]: https://npmjs.org/package/confluency

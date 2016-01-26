@@ -59,11 +59,13 @@ export default class Confluency {
   }
 
 
+  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e136
   getPage(pageId) {
     return Promise.resolve().then(() => this.GET('/content/' + pageId));
   }
 
 
+  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e775
   getChildren(pageId) {
     return Promise.resolve().then(() => this.GET('/content/' + pageId + '/child/page')).then(body => body.results);
   };
@@ -79,6 +81,7 @@ export default class Confluency {
   }
 
 
+  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e967
   getPages(spaceKey, opts) {
     opts = opts || {};
     opts.limit = opts.limit || 25;
@@ -100,6 +103,7 @@ export default class Confluency {
   }
 
 
+  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e858
   getSpaces(opts) {
     opts = opts || {};
     opts.limit = opts.limit || 25;
@@ -110,11 +114,13 @@ export default class Confluency {
   };
 
 
+  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e915
   getSpace(spaceKey) {
     return Promise.resolve().then(() => this.GET('/space/' + spaceKey));
   }
 
 
+  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e5
   create({space, title, content, parent}) {
     const body = {
       type: 'page',
@@ -134,6 +140,7 @@ export default class Confluency {
   }
   
 
+  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e166
   del(pageId) {
     return this.DEL('/content/' + pageId);
   }

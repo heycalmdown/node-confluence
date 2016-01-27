@@ -5,6 +5,7 @@ import * as url from 'url';
 export default class Confluency {
   constructor({host, context, username, password}) {
     this.host = host;
+    context = context || '';
     if (context.length && context[0] !== '/') context = '/' + context;
     this.context = context;
     this.username = username;
@@ -60,8 +61,12 @@ export default class Confluency {
 
 
   // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e136
-  getPage(pageId) {
-    return Promise.resolve().then(() => this.GET('/content/' + pageId));
+  getPage(pageId, expand) {
+    let uri = '/content/' + pageId;
+    if (Object.keys(expand).length) {
+      uri = `${uri}?expand=${expand.join(',')}`;
+    }
+    return Promise.resolve().then(() => this.GET(uri));
   }
 
 

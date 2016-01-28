@@ -63,7 +63,7 @@ export default class Confluency {
   // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e136
   getPage(pageId, expand) {
     let uri = '/content/' + pageId;
-    if (Object.keys(expand).length) {
+    if (expand && Object.keys(expand).length) {
       uri = `${uri}?expand=${expand.join(',')}`;
     }
     return Promise.resolve().then(() => this.GET(uri));

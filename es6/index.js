@@ -26,15 +26,21 @@ export default class Confluency {
   }
 
 
+  auth(request) {    
+    if (this.username && this.password) {
+      request.set('Authorization', this.getBasicAuth());
+    }
+    return request;
+  }
+
+
   GET(uri) {
     let prefix = '/rest/api';
     if (uri.slice(0, prefix.length) === prefix) {
       prefix = '';
     }
     const request = this.client.get(this.compositeUri({prefix, uri}));
-    if (this.username && this.password) {
-      request.set('Authorization', this.getBasicAuth());
-    }
+    this.auth(request);
     return request.then(data => data.body);
   }
 
@@ -42,20 +48,25 @@ export default class Confluency {
   POST(uri, body) {
     const prefix = '/rest/api';
     const request = this.client.post(this.compositeUri({prefix, uri}));
-    if (this.username && this.password) {
-      request.set('Authorization', this.getBasicAuth());
-    }
+    this.auth(request);
     request.set('Content-Type', 'application/json');
     return request.send(body).then(data => data.body); 
   }
   
   
+  PUT(uri, body) {
+    const prefix = '/rest/api';
+    const request = this.client.put(this.compositeUri({prefix, uri}));
+    this.auth(request);
+    request.set('Content-Type', 'application/json');
+    return request.send(body).then(data => data.body).catch(e => console.error(e));
+  }
+
+
   DEL(uri) {
     const prefix = '/rest/api';
     const request = this.client.del(this.compositeUri({prefix, uri}));
-    if (this.username && this.password) {
-      request.set('Authorization', this.getBasicAuth());
-    }
+    this.auth(request);
     return request.then(data => data.body);
   }
 
@@ -182,5 +193,17 @@ export default class Confluency {
     const query = {cql, limit};
     return this.GET('/content/search' + url.format({query})).then(body => body.results);
   }
+  
+  
+  changeParent(pageId, parentId) {
+    return this.getPage(pageId).then(page => {
+      const body = {
+        type: 'page',
+        title: page.title,
+        version: {number: page.version.number + 1},
+        ancestors: [{type: 'page', id: parentId}]
+      };
+      return this.PUT('/content/' + pageId, body);
+    });
+  }
 }
-

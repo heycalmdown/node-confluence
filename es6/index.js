@@ -178,8 +178,9 @@ export default class Confluency {
 
 
   // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e221
-  search(cql) {
-    return this.GET('/content/search?cql=' + encodeURI(cql)).then(body => body.results);
+  search(cql, {limit}) {
+    const query = {cql, limit};
+    return this.GET('/content/search' + url.format({query})).then(body => body.results);
   }
 }
 

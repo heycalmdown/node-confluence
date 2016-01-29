@@ -72,7 +72,8 @@ export default class Confluency {
 
   // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e775
   getChildren(pageId) {
-    return Promise.resolve().then(() => this.GET('/content/' + pageId + '/child/page')).then(body => body.results);
+    const uri = '/content/' + pageId + '/child/page';
+    return Promise.resolve().then(() => this.GET(uri)).then(body => body.results);
   };
 
 
@@ -157,6 +158,13 @@ export default class Confluency {
   }
 
 
+  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e529
+  tagLabels(pageId, labels) {
+    labels = labels.map(label => ({prefix: 'global', name: label}));
+    return this.POST(`/content/${pageId}/label`, labels);
+  }
+
+
   // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e504
   getLabels(pageId) {
     return this.GET(`/content/${pageId}/label`).then(body => body.results);
@@ -166,6 +174,12 @@ export default class Confluency {
   // https://jira.atlassian.com/browse/CRA-561
   untagLabel(pageId, label) {
     throw new Error('not yet supported');
+  }
+
+
+  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e221
+  search(cql) {
+    return this.GET('/content/search?cql=' + encodeURI(cql)).then(body => body.results);
   }
 }
 

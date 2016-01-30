@@ -3,9 +3,8 @@ import * as superagent from 'superagent-bluebird-promise';
 import * as url from 'url';
 
 export default class Confluency {
-  constructor({host, context, username, password}) {
+  constructor({host, context='', username, password}) {
     this.host = host;
-    context = context || '';
     if (context.length && context[0] !== '/') context = '/' + context;
     this.context = context;
     this.username = username;
@@ -82,14 +81,19 @@ export default class Confluency {
 
 
   // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e775
-  getChildren(pageId) {
-    const uri = '/content/' + pageId + '/child/page';
-    return Promise.resolve().then(() => this.GET(uri)).then(body => body.results);
+  getChildren(pageId, {all, expand=[]} = {}) {
+    let uri = '/content/' + pageId + '/child/page';
+    if (expand.length) {
+      uri += `?expand=${expand.join(',')}`;
+    }
+    return Promise.resolve().then(() => {
+      if (!all) return this.GET(uri).then(body => body.results);
+      return this._getPagesAll(uri);
+    });
   };
 
 
-  _getPagesAll(query, pages) {
-    pages = pages || [];
+  _getPagesAll(query, pages=[]) {
     return this.GET(query).then(body => {
       pages = pages.concat(body.results);
       if (!body._links.next) return pages;
@@ -99,9 +103,7 @@ export default class Confluency {
 
 
   // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e967
-  getPages(spaceKey, opts) {
-    opts = opts || {};
-    opts.limit = opts.limit || 25;
+  getPages(spaceKey, opts={limit: 25}) {
     return Promise.resolve().then(() => {
       const query = '/space/' + spaceKey + '/content/page';
       if (!opts.all) return this.GET(query).then(body => body.results);
@@ -110,8 +112,7 @@ export default class Confluency {
   }
 
 
-  _getSpacesAll(query, spaces) {
-    spaces = spaces || [];
+  _getSpacesAll(query, spaces=[]) {
     return this.GET(query).then(body => {
       spaces = spaces.concat(body.results);
       if (!body._links.next) return spaces;
@@ -121,9 +122,7 @@ export default class Confluency {
 
 
   // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e858
-  getSpaces(opts) {
-    opts = opts || {};
-    opts.limit = opts.limit || 25;
+  getSpaces(opts={limit:25}) {
     return Promise.resolve().then(() => {
       if (!opts.all) return this.GET('/space').then(body => body.results);
       return this._getSpacesAll('/space?limit=' + opts.limit);

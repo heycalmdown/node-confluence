@@ -19,13 +19,13 @@ describe('default', function () {
   it('should get spaces', function () {
     return confluency.getSpaces().then(spaces => {
       spaces.should.be.an.Array();
-      spaces.length.should.equal(1);
+      spaces.length.should.equal(2);
     });
   });
   it('should get every spaces', function () {
     return confluency.getSpaces({all: true, limit: 5}).then(spaces => {
       spaces.should.be.an.Array();
-      spaces.length.should.equal(1);
+      spaces.length.should.equal(2);
     });
   });
   it('should get a space', function () {

@@ -8,6 +8,7 @@
     "superagent": "^1.6.1",
     "superagent-bluebird-promise": "^3.0.0"
   },
+  "license": "Apache-2.0",
   "main": "lib/index.js",
   "devDependencies": {
     "babel-cli": "^6.4.0",

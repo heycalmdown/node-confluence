@@ -7,3 +7,6 @@ node_js:
 branches:
   only:
     - master
+script: "npm run test-cov"
+after_script: "npm i coveralls && cat ./coverage/lcov.info | coveralls"
+

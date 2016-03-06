@@ -105,6 +105,7 @@ describe('page test', function () {
 
 
   it('should tag a label', function () {
+    this.timeout(10000);
     return confluency.tagLabel(pageId, 'test')
       .then(() => {
         return confluency.getLabels(pageId);

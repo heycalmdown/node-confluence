@@ -14,6 +14,7 @@
     "babel-cli": "^6.4.0",
     "babel-preset-es2015": "^6.3.13",
     "babel-register": "^6.4.3",
+    "isparta": "^4.0.0",
     "mocha": "",
     "should": "^8.0.2",
     "supertest": ""
@@ -25,6 +26,7 @@
   },
   "scripts": {
     "test": "mocha test --compilers js:babel-register",
+    "test-cov": "babel-node node_modules/.bin/isparta cover _mocha -- test",
     "babel": "babel -d lib/ es6/",
     "babeltest": "npm run babel && npm test",
     "prepublish": "npm run babel"

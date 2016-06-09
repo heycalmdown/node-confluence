@@ -16,7 +16,7 @@
     "babel-register": "^6.4.3",
     "isparta": "^4.0.0",
     "mocha": "",
-    "should": "^8.0.2",
+    "should": "^9.0.1",
     "supertest": ""
   },
   "optionalDependencies": {},

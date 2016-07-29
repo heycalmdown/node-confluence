@@ -194,6 +194,7 @@ export default class Confluency {
   }
   
   
+  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#content-update
   changeParent(pageId, parentId) {
     return this.getPage(pageId).then(page => {
       const body = {

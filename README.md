@@ -1,9 +1,9 @@
 # node-confluence [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][depstat-image]][depstat-url] [![Coverage Status][coveralls-image]][coveralls-url]
 
-* https://docs.atlassian.com/atlassian-confluence/REST/latest/
-* https://developer.atlassian.com/confdev/confluence-rest-api/confluence-rest-api-examples
-* http://stackoverflow.com/questions/29531312/confluence-rest-api-authorization-issue
-* http://stackoverflow.com/questions/23523705/how-to-create-new-page-in-confluence-using-their-rest-api
+- https://docs.atlassian.com/atlassian-confluence/REST/latest/
+- https://developer.atlassian.com/confdev/confluence-rest-api/confluence-rest-api-examples
+- http://stackoverflow.com/questions/29531312/confluence-rest-api-authorization-issue
+- http://stackoverflow.com/questions/23523705/how-to-create-new-page-in-confluence-using-their-rest-api
 
 # How to test
 
@@ -23,3 +23,30 @@ $ npm run babeltest # for developers
 
 [coveralls-url]: https://coveralls.io/github/heycalmdown/node-confluence?branch=master
 [coveralls-image]: https://coveralls.io/repos/github/heycalmdown/node-confluence/badge.svg?branch=master
+
+# How to use
+
+```Javascript
+const host = 'https://xxx.atlassian.net';
+const context = process.env.CONFLUENCE_CONTEXT || '';
+const confluency = new Confluency({ host, context });
+confluency.getPage(1081354).then(data => {
+  console.log(data);
+});
+```
+
+# Support features
+
+- `getPage(pageId, expand)`
+- `getChildren(pageId, {all, expand=[]} = {})`
+- `getPages(spaceKey, opts={limit: 25})`
+- `getSpaces(opts={limit:25})`
+- `getSpace(spaceKey)`
+- `create({space, title, content, parent})`
+- `del(pageId)`
+- `tagLabel(pageId, label)`
+- `tagLabels(pageId, labels)`
+- `getLabels(pageId)`
+- `untagLabel(pageId, label)`
+- `search(cql, {limit}={})`
+- `changeParent(pageId, parentId)`

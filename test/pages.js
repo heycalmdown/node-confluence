@@ -7,7 +7,7 @@ const host = process.env.CONFLUENCE_HOST || 'https://confluency.atlassian.net';
 const context = process.env.CONFLUENCE_CONTEXT || 'wiki';
 const confluency = new Confluency({ host, context });
 
-describe('pages test', function () {
+describe('test pages', function () {
   this.timeout(10000);
 
   const space = 'CON';

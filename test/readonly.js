@@ -5,7 +5,9 @@ const host = process.env.CONFLUENCE_HOST || 'https://confluency.atlassian.net';
 const context = process.env.CONFLUENCE_CONTEXT || 'wiki';
 const confluency = new Confluency({ host, context });
 
-describe('default', function () {
+describe('test readonly actions', function () {
+  this.timeout(10000);
+
   it('should get a page', function () {
     return confluency.getPage(1081354).then(data => {
     });
@@ -40,7 +42,6 @@ describe('default', function () {
     });
   });
   it('should get every pages in a space', function () {
-    this.timeout(10000);
     return confluency.getPages('CON', {all: true, limit: 5}).then(pages => {
       pages.should.be.an.Array();
       pages.length.should.greaterThan(10);

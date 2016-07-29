@@ -5,7 +5,9 @@ const host = process.env.CONFLUENCE_HOST || 'https://confluency.atlassian.net';
 const context = process.env.CONFLUENCE_CONTEXT || 'wiki';
 const confluency = new Confluency({ host, context });
 
-describe('page test', function () {
+describe('test a page', function () {
+  this.timeout(10000);
+  
   const space = 'CON';
   const title = 'page test';
   const content = 'hoho';
@@ -24,7 +26,6 @@ describe('page test', function () {
 
 
   it('should tag a label', function () {
-    this.timeout(10000);
     return confluency.tagLabel(pageId, 'test')
       .then(() => {
         return confluency.getLabels(pageId);
@@ -32,6 +33,30 @@ describe('page test', function () {
       .then(labels => {
         labels.should.be.an.Array();
         labels[0].name.should.be.exactly('test');
+      });
+  });
+
+
+  it('should tag labels', function () {
+    return confluency.tagLabels(pageId, ['test1', 'test2'])
+      .then(() => {
+        return confluency.getLabels(pageId);
+      })
+      .then(labels => {
+        labels.should.be.an.Array();
+        labels.should.have.length(3);
+      });
+  });
+
+
+  it('should untag a label', function () {
+    return confluency.untagLabel(pageId, 'test')
+      .then(() => {
+        return confluency.getLabels(pageId);
+      })
+      .then(labels => {
+        labels.should.be.an.Array();
+        labels.should.have.length(2);
       });
   });
 });

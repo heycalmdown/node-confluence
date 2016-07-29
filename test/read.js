@@ -5,9 +5,10 @@ const host = process.env.CONFLUENCE_HOST || 'https://confluency.atlassian.net';
 const context = process.env.CONFLUENCE_CONTEXT || 'wiki';
 const confluency = new Confluency({ host, context });
 
-describe('simple write test', function () {
+describe('test simple write', function () {
+  this.timeout(10000);
+
   it('should create a page', function () {
-    this.timeout(10000);
     const space = 'CON';
     const title = 'example';
     const content = 'haha';
@@ -23,8 +24,8 @@ describe('simple write test', function () {
     });
   });
 
+
   it('should create a child page', function () {
-    this.timeout(10000);
     const space = 'CON';
     const title = 'example2';
     const content = 'haha';

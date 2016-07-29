@@ -70,7 +70,7 @@ export default class Confluency {
   }
 
 
-  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e136
+  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#content-getContent
   getPage(pageId, expand) {
     let uri = '/content/' + pageId;
     if (expand && Object.keys(expand).length) {
@@ -80,7 +80,7 @@ export default class Confluency {
   }
 
 
-  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e775
+  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#content/{id}/child-childrenOfType
   getChildren(pageId, {all, expand=[]} = {}) {
     let uri = '/content/' + pageId + '/child/page';
     if (expand.length) {
@@ -102,7 +102,7 @@ export default class Confluency {
   }
 
 
-  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e967
+  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#space-contentsWithType
   getPages(spaceKey, opts={limit: 25}) {
     return Promise.resolve().then(() => {
       const query = '/space/' + spaceKey + '/content/page';
@@ -121,7 +121,7 @@ export default class Confluency {
   }
 
 
-  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e858
+  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#space-spaces
   getSpaces(opts={limit:25}) {
     return Promise.resolve().then(() => {
       if (!opts.all) return this.GET('/space').then(body => body.results);
@@ -136,7 +136,7 @@ export default class Confluency {
   }
 
 
-  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e5
+  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#content-createContent
   create({space, title, content, parent}) {
     const body = {
       type: 'page',
@@ -156,39 +156,39 @@ export default class Confluency {
   }
   
 
-  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e166
+  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#content-delete
   del(pageId) {
     return this.DEL('/content/' + pageId);
   }
 
 
-  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e529
+  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#content/{id}/label-addLabels
   tagLabel(pageId, label) {
     return this.POST(`/content/${pageId}/label`, [{prefix: 'global', name: label}]);
   }
 
 
-  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e529
+  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#content/{id}/label-addLabels
   tagLabels(pageId, labels) {
     labels = labels.map(label => ({prefix: 'global', name: label}));
     return this.POST(`/content/${pageId}/label`, labels);
   }
 
 
-  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e504
+  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#content/{id}/label-labels
   getLabels(pageId) {
     return this.GET(`/content/${pageId}/label`).then(body => body.results);
   }
 
 
-  // https://jira.atlassian.com/browse/CRA-561
+  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#content/{id}/label-deleteLabelWithQueryParam
   untagLabel(pageId, label) {
-    throw new Error('not yet supported');
+    return this.DEL(`/content/${pageId}/label?name=${label}`);
   }
 
 
-  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#d3e221
-  search(cql, {limit}) {
+  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#content-search
+  search(cql, {limit}={}) {
     const query = {cql, limit};
     return this.GET('/content/search' + url.format({query})).then(body => body.results);
   }

@@ -154,6 +154,30 @@ export default class Confluency {
     }
     return this.POST('/content', body);
   }
+
+
+  // https://docs.atlassian.com/atlassian-confluence/REST/latest/#content-update
+  update({space, id, title, content, parent, version}) {
+    const body = {
+      type: 'page',
+      title: title,
+      space: {key: space},
+      version: {
+        number: version,
+        minorEdit: false
+      },
+      body: {
+        storage: {
+          value: content,
+          representation: 'storage'
+        }
+      }
+    };
+    if (parent) {
+      body.ancestors = [{id: parent}];
+    }
+    return this.PUT('/content/' + id, body);
+  }
   
 
   // https://docs.atlassian.com/atlassian-confluence/REST/latest/#content-delete

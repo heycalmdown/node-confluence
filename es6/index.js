@@ -70,12 +70,28 @@ export default class Confluency {
   }
 
 
+  createQueryString(parameters) {
+    Object.keys(parameters).forEach((key) => {
+      if (Array.isArray(parameters[key])) {
+        parameters[key] = parameters[key].join(',');
+      }
+
+      if (!parameters[key] && typeof parameters[key] !== "number") {
+        delete parameters[key];
+      }
+    });
+    return url.format({
+      query: parameters
+    });
+  }
+
+
   // https://docs.atlassian.com/atlassian-confluence/REST/latest/#content-getContent
   getPage(pageId, expand) {
     let uri = '/content/' + pageId;
-    if (expand && Object.keys(expand).length) {
-      uri = `${uri}?expand=${expand.join(',')}`;
-    }
+    uri += this.createQueryString({
+      expand: expand
+    });
     return Promise.resolve().then(() => this.GET(uri));
   }
 
@@ -83,9 +99,9 @@ export default class Confluency {
   // https://docs.atlassian.com/atlassian-confluence/REST/latest/#content/{id}/child-childrenOfType
   getChildren(pageId, {all, expand=[]} = {}) {
     let uri = '/content/' + pageId + '/child/page';
-    if (expand.length) {
-      uri += `?expand=${expand.join(',')}`;
-    }
+    uri += this.createQueryString({
+      expand: expand
+    });
     return Promise.resolve().then(() => {
       if (!all) return this.GET(uri).then(body => body.results);
       return this._getPagesAll(uri);
@@ -94,6 +110,7 @@ export default class Confluency {
 
 
   _getPagesAll(query, pages=[]) {
+    console.log("gPA", query);
     return this.GET(query).then(body => {
       pages = pages.concat(body.results);
       if (!body._links.next) return pages;
@@ -103,11 +120,15 @@ export default class Confluency {
 
 
   // https://docs.atlassian.com/atlassian-confluence/REST/latest/#space-contentsWithType
-  getPages(spaceKey, opts={limit: 25}) {
+  getPages(spaceKey, opts={limit: 25,expand: []}) {
+      console.log("gp", opts);
     return Promise.resolve().then(() => {
       const query = '/space/' + spaceKey + '/content/page';
       if (!opts.all) return this.GET(query).then(body => body.results);
-      return this._getPagesAll(query + '?limit=' + opts.limit);
+      return this._getPagesAll(query + this.createQueryString({
+        limit: opts.limit,
+        expand: opts.expand
+      }));
     });
   }
 
@@ -125,7 +146,9 @@ export default class Confluency {
   getSpaces(opts={limit:25}) {
     return Promise.resolve().then(() => {
       if (!opts.all) return this.GET('/space').then(body => body.results);
-      return this._getSpacesAll('/space?limit=' + opts.limit);
+      return this._getSpacesAll('/space' + this.createQueryString({
+        limit: opts.limit
+      }));
     });
   };
 
@@ -183,7 +206,9 @@ export default class Confluency {
 
   // https://docs.atlassian.com/atlassian-confluence/REST/latest/#content/{id}/label-deleteLabelWithQueryParam
   untagLabel(pageId, label) {
-    return this.DEL(`/content/${pageId}/label?name=${label}`);
+    return this.DEL(`/content/${pageId}/label` + this.createQueryString({
+      name: label
+    }));
   }
 
 

@@ -206,4 +206,14 @@ export default class Confluency {
       return this.PUT('/content/' + pageId, body);
     });
   }
+
+  // https://developer.atlassian.com/confdev/confluence-server-rest-api/confluence-rest-api-examples#ConfluenceRESTAPIExamples-Convertwikimarkuptostorageformat
+  convertWikiMarkup(content) {
+    return this.POST('/contentbody/convert/storage', {
+      value: content,
+      representation: "wiki"
+    }).then((response) => {
+      return response.value
+    });
+  }
 }

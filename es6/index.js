@@ -110,7 +110,6 @@ export default class Confluency {
 
 
   _getPagesAll(query, pages=[]) {
-    console.log("gPA", query);
     return this.GET(query).then(body => {
       pages = pages.concat(body.results);
       if (!body._links.next) return pages;
@@ -121,7 +120,6 @@ export default class Confluency {
 
   // https://docs.atlassian.com/atlassian-confluence/REST/latest/#space-contentsWithType
   getPages(spaceKey, opts={limit: 25,expand: []}) {
-      console.log("gp", opts);
     return Promise.resolve().then(() => {
       const query = '/space/' + spaceKey + '/content/page';
       if (!opts.all) return this.GET(query).then(body => body.results);

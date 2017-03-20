@@ -59,4 +59,22 @@ describe('test a page', function () {
         labels.should.have.length(2);
       });
   });
+
+  it('updates the text', function () {
+    // Version is 2 because we just created the page during the start of
+    // the test.
+    return confluency.update({
+      space: "CON",
+      title: "updated page test",
+      id: pageId,
+      content: "updated content",
+      parent: null,
+      version: 2
+    }).then(() => {
+      return confluency.getPage(pageId, ['body.storage']);
+    }).then((page) => {
+      page.title.should.be.exactly('updated page test');
+      page.body.storage.value.should.be.exactly('updated content');
+    });
+  });
 });

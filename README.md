@@ -43,6 +43,7 @@ confluency.getPage(1081354).then(data => {
 - `getSpaces(opts={limit:25})`
 - `getSpace(spaceKey)`
 - `create({space, title, content, parent})`
+- `update({space, id, title, content, parent, version})`
 - `del(pageId)`
 - `tagLabel(pageId, label)`
 - `tagLabels(pageId, labels)`

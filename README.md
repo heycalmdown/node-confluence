@@ -50,3 +50,4 @@ confluency.getPage(1081354).then(data => {
 - `untagLabel(pageId, label)`
 - `search(cql, {limit}={})`
 - `changeParent(pageId, parentId)`
+- `convertWikiMarkup(content)`

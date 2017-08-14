@@ -1,7 +1,7 @@
 {
   "author": "Kei Son <hey.calmdown@gmail.com>",
   "name": "confluency",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "dependencies": {
     "bluebird": "^3.1.1",
     "lodash": "^4.0.1",

@@ -46,8 +46,9 @@ export default class Confluency {
   }
 
 
-  newRequest(method, uri) {
-    const request = this.client[method](this.compositeUri({prefix: '/rest/api', uri}));
+  newRequest(method, uri, noRestApi) {
+    const prefix = !noRestApi && '/rest/api' || '';
+    const request = this.client[method](this.compositeUri({prefix, uri}));
     if (this.authType === 'basic') {
       this.auth(request);
     }

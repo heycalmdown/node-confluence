@@ -38,12 +38,18 @@ export default class Confluency {
   }
 
 
+  auth(request) {
+    const tok = this.username + ':' + this.password;
+    const hash =  new Buffer(tok, 'binary').toString('base64');
+    request.set('Authorization', 'Basic ' + hash);
+    return request;
+  }
+
+
   newRequest(method, uri) {
     const request = this.client[method](this.compositeUri({prefix: '/rest/api', uri}));
     if (this.authType === 'basic') {
-      const tok = this.username + ':' + this.password;
-      const hash =  new Buffer(tok, 'binary').toString('base64');
-      request.set('Authorization', 'Basic ' + hash);
+      this.auth(request);
     }
     return request;
   }

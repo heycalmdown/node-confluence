@@ -1,72 +1,83 @@
 import * as Promise from 'bluebird';
-import * as superagent from 'superagent-bluebird-promise';
+import * as superagent from 'superagent';
 import * as url from 'url';
 
 export default class Confluency {
-  constructor({host, context='', username, password}) {
+  constructor({host, context='', username, password, authType='no'}) {
     this.host = host;
     if (context.length && context[0] !== '/') context = '/' + context;
     this.context = context;
     this.username = username;
     this.password = password;
+    this.authType = username && 'basic' || authType;
+    if (this.authType === 'basic' && !(username && password)) {
+      throw new Error('BasicAuth needs both of username and password');
+    }
+
     this.client = superagent.agent();
+    this.cookieAuth = Promise.resolve();
+    if (this.authType === 'cookie') {
+      this.cookieAuth = Promise.resolve().then(() => {
+        return this.client.post(this.compositeUri({prefix: '', uri: '/login.action'}))
+          .type('form')
+          .send({ os_username: username, os_password: password })
+          .then(o => o.body)
+          .catch(e => {
+            throw new Error('CookieAuth has failed');
+          });
+      })
+    }
   }
 
 
-  getBasicAuth() {
-    const tok = this.username + ':' + this.password;
-    const hash =  new Buffer(tok, 'binary').toString('base64');
-    return 'Basic ' + hash;
-  }
-  
-  
   compositeUri({prefix, uri}) {
+    if (uri.slice(0, prefix.length) === prefix) {
+      prefix = '';
+    }
     return this.host + this.context + prefix + uri;
   }
 
 
-  auth(request) {    
-    if (this.username && this.password) {
-      request.set('Authorization', this.getBasicAuth());
+  newRequest(method, uri) {
+    const request = this.client[method](this.compositeUri({prefix: '/rest/api', uri}));
+    if (this.authType === 'basic') {
+      const tok = this.username + ':' + this.password;
+      const hash =  new Buffer(tok, 'binary').toString('base64');
+      request.set('Authorization', 'Basic ' + hash);
     }
     return request;
   }
 
 
   GET(uri) {
-    let prefix = '/rest/api';
-    if (uri.slice(0, prefix.length) === prefix) {
-      prefix = '';
-    }
-    const request = this.client.get(this.compositeUri({prefix, uri}));
-    this.auth(request);
-    return request.then(data => data.body);
+    return this.cookieAuth.then(() => {
+      return this.newRequest('get', uri).then(data => data.body);
+    });
   }
 
  
   POST(uri, body) {
-    const prefix = '/rest/api';
-    const request = this.client.post(this.compositeUri({prefix, uri}));
-    this.auth(request);
-    request.set('Content-Type', 'application/json');
-    return request.send(body).then(data => data.body); 
+    return this.cookieAuth.then(() => {
+      const request = this.newRequest('post', uri);
+      request.set('Content-Type', 'application/json');
+      return request.send(body).then(data => data.body); 
+    });
   }
   
   
   PUT(uri, body) {
-    const prefix = '/rest/api';
-    const request = this.client.put(this.compositeUri({prefix, uri}));
-    this.auth(request);
-    request.set('Content-Type', 'application/json');
-    return request.send(body).then(data => data.body).catch(e => console.error(e));
+    return this.cookieAuth.then(() => {
+      const request = this.newRequest('put', uri);
+      request.set('Content-Type', 'application/json');
+      return request.send(body).then(data => data.body).catch(e => console.error(e));
+    });
   }
 
 
   DEL(uri) {
-    const prefix = '/rest/api';
-    const request = this.client.del(this.compositeUri({prefix, uri}));
-    this.auth(request);
-    return request.then(data => data.body);
+    return this.cookieAuth.then(() => {
+      return this.newRequest('del', uri).then(data => data.body);
+    });
   }
 
 

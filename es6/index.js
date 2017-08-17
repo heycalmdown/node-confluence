@@ -3,13 +3,13 @@ import * as superagent from 'superagent';
 import * as url from 'url';
 
 export default class Confluency {
-  constructor({host, context='', username, password, authType='no'}) {
+  constructor({host, context='', username, password, authType}) {
     this.host = host;
     if (context.length && context[0] !== '/') context = '/' + context;
     this.context = context;
     this.username = username;
     this.password = password;
-    this.authType = username && 'basic' || authType;
+    this.authType = authType || username && 'basic' || 'no';
     if (this.authType === 'basic' && !(username && password)) {
       throw new Error('BasicAuth needs both of username and password');
     }

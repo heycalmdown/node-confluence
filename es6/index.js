@@ -176,7 +176,7 @@ export default class Confluency {
 
 
   // https://docs.atlassian.com/atlassian-confluence/REST/latest/#content-createContent
-  create({space, title, content, parent}) {
+  create({space, title, content, parent, representation='storage'}) {
     const body = {
       type: 'page',
       title: title,
@@ -184,7 +184,7 @@ export default class Confluency {
       body: {
         storage: {
           value: content,
-          representation: 'storage'
+          representation: representation
         }
       }
     };
@@ -196,7 +196,7 @@ export default class Confluency {
 
 
   // https://docs.atlassian.com/atlassian-confluence/REST/latest/#content-update
-  update({space, id, title, content, parent, version}) {
+  update({space, id, title, content, parent, version, representation='storage'}) {
     const body = {
       type: 'page',
       title: title,
@@ -208,7 +208,7 @@ export default class Confluency {
       body: {
         storage: {
           value: content,
-          representation: 'storage'
+          representation: representation
         }
       }
     };

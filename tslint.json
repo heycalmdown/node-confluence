@@ -1,0 +1,78 @@
+{
+    "rules": {
+        "align": [true, "parameters", "statements"],
+        "arrow-parens": [true, "ban-single-arg-parens"],
+        "class-name": true,
+        "comment-format": [true, "check-space"],
+        // "completed-docs": [true],
+        "cyclomatic-complexity": [true, 10],
+        "eofline": true,
+        "forin": true,
+        "import-spacing": true,
+        "indent": [true, "spaces"],
+        "member-ordering": [
+            true,
+            {"order": "statics-first"}
+        ],
+        // "max-file-line-count": [true, 500], //TODO: this option is temporarily disabled to avoid big chore for now
+        "max-line-length": [true, 120],
+        "no-angle-bracket-type-assertion": true,
+        // "no-any": true,
+        "no-conditional-assignment": true,
+        "no-consecutive-blank-lines": [true, 1],
+        // "no-default-export": true,
+        "no-duplicate-variable": true,
+        "no-eval": true,
+        // "no-for-in-array": true,
+        // "no-magic-numbers": true,
+        "no-reference": true,
+        "no-string-literal": true,
+        "no-trailing-whitespace": true,
+        "no-unsafe-finally": true,
+        "no-unused-expression": true,
+        "no-var-keyword": true,
+        "no-var-requires": true,
+        "object-literal-key-quotes": [
+            true, "as-needed"
+        ],
+        "object-literal-shorthand": true,
+        // "object-literal-sort-keys": true,
+        "ordered-imports": [true],
+        "one-line": [ true, "check-catch", "check-finally", "check-open-brace", "check-whitespace", "check-else" ],
+        "one-variable-per-declaration": [true, "ignore-for-loop"],
+        "only-arrow-functions": [true, "allow-declarations"],
+        "prefer-const": true,
+        "prefer-for-of": true,
+        // "promise-function-async": true,
+        "quotemark": [ true, "single" ],
+        "radix": true,
+        "semicolon": [ true, "always" ],
+        "space-before-function-paren": [true, {
+            "named": "never",
+            "anonymous": "always",
+            "asyncArrow": "always",
+            "method": "never",
+            "constructor": "never"}],
+        // "strict-boolean-expressions": true,
+        "trailing-comma": [true, {"multiline": "never", "singleline": "never"}],
+        "triple-equals": [ true, "allow-null-check" ],
+        "typedef-whitespace": [true, {
+            "call-signature": "nospace",
+            "index-signature": "nospace",
+            "parameter": "nospace",
+            "property-declaration": "nospace",
+            "variable-declaration": "nospace"
+        }],
+        "unified-signatures": true,
+        "use-isnan": true,
+        "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore", "allow-pascal-case"],
+        "whitespace": [true,
+            "check-branch",
+            "check-decl",
+            "check-operator",
+            "check-separator",
+            "check-type"
+        ]
+    }
+}
+

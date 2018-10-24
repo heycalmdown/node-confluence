@@ -1,7 +1,7 @@
-import Confluency from '..';
-import * as Promise from 'bluebird';
+import * as Bluebird from 'bluebird';
 import * as _ from 'lodash';
 import 'should';
+import Confluency from '..';
 
 const host = process.env.CONFLUENCE_HOST || 'https://confluency.atlassian.net';
 const context = process.env.CONFLUENCE_CONTEXT || 'wiki';
@@ -12,7 +12,7 @@ describe('test pages', function () {
 
   const space = 'CON';
   const parent = '1081356';
-  let pageIds = [];
+  const pageIds: string[] = [];
   before(() => {
     function remember(page) {
       pageIds.push(page.id);
@@ -28,17 +28,14 @@ describe('test pages', function () {
     });
   });
 
-
   after(() => {
-    return Promise.each(pageIds, pageId => {
+    return Bluebird.each(pageIds, pageId => {
       return confluency.del(pageId);
     });
   });
 
-
-  it('should move a child', function () {
-    return confluency.changeParent(pageIds[1], pageIds[2]).then(page => {
-      _.takeRight(page.ancestors, 1)[0].title.should.be.exactly('parent 2');
-    });
+  it('should move a child', async () => {
+    const page = await confluency.changeParent(pageIds[1], pageIds[2]);
+    _.takeRight(page.ancestors, 1)[0].title.should.be.exactly('parent 2');
   });
 });

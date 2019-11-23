@@ -5,14 +5,14 @@
   "dependencies": {
     "bluebird": "^3.5.3",
     "lodash": "^4.17.11",
-    "superagent": "^4.0.0"
+    "superagent": "^5.1.1"
   },
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "devDependencies": {
     "@types/bluebird": "^3.5.24",
     "@types/mocha": "^5.2.5",
-    "@types/superagent": "^3.8.4",
+    "@types/superagent": "^4.1.4",
     "isparta": "^4.0.0",
     "mocha": "",
     "should": "^13.2.3",

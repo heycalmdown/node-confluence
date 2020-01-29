@@ -11,7 +11,7 @@
   "main": "lib/index.js",
   "devDependencies": {
     "@types/bluebird": "^3.5.24",
-    "@types/mocha": "^5.2.5",
+    "@types/mocha": "^7.0.0",
     "@types/superagent": "^4.1.4",
     "isparta": "^4.0.0",
     "mocha": "",

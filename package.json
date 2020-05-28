@@ -5,7 +5,7 @@
   "dependencies": {
     "bluebird": "^3.5.3",
     "lodash": "^4.17.12",
-    "superagent": "^5.1.1",
+    "superagent": "^5.2.2",
     "snyk": "^1.330.2"
   },
   "license": "Apache-2.0",

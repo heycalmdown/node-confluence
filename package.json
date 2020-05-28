@@ -4,8 +4,9 @@
   "version": "0.9.0",
   "dependencies": {
     "bluebird": "^3.5.3",
-    "lodash": "^4.17.11",
-    "superagent": "^5.1.1"
+    "lodash": "^4.17.12",
+    "superagent": "^5.1.1",
+    "snyk": "^1.330.2"
   },
   "license": "Apache-2.0",
   "main": "lib/index.js",
@@ -29,6 +30,9 @@
     "build": "tsc",
     "test": "mocha lib/test",
     "test-cov": "isparta cover _mocha -- lib/test",
-    "prepublishOnly": "npm run build"
-  }
+    "prepublishOnly": "npm run build",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
+  },
+  "snyk": true
 }

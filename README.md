@@ -1,6 +1,6 @@
 # node-confluence [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][depstat-image]][depstat-url] [![Coverage Status][coveralls-image]][coveralls-url]
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/heycalmdown/node-confluence.svg)](https://greenkeeper.io/)
+
 
 - https://docs.atlassian.com/atlassian-confluence/REST/latest/
 - https://developer.atlassian.com/confdev/confluence-rest-api/confluence-rest-api-examples

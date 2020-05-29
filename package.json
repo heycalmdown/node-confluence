@@ -6,7 +6,7 @@
     "bluebird": "^3.5.3",
     "lodash": "^4.17.12",
     "superagent": "^5.1.1",
-    "snyk": "^1.330.2"
+    "snyk": "^1.332.0"
   },
   "license": "Apache-2.0",
   "main": "lib/index.js",

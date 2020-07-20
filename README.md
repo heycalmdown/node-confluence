@@ -1,4 +1,5 @@
-# node-confluence [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][depstat-image]][depstat-url] [![Coverage Status][coveralls-image]][coveralls-url]
+# node-confluence [![NPM version][npm-image]][npm-url] ![Node.js CI](https://github.com/heycalmdown/node-confluence/workflows/Node.js%20CI/badge.svg) [![Dependency Status][depstat-image]][depstat-url] [![Coverage Status][coveralls-image]][coveralls-url]
+
 
 
 

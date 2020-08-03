@@ -39,24 +39,230 @@ interface PutApiContentBody extends BaseApiContentBody {
   body?: ContentBody;
 }
 
+export interface OperationCheckResult {
+  operation: string;
+  targetType: string;
+}
+
+export interface ContentChildType {
+  _expandable: any;
+  attachment?: any;
+  comment?: any;
+  page?: any;
+}
+
+export interface GenericLinks {
+  [key: string]: string;
+}
+
+export interface ContentArray {
+  results: Content[];
+  start: number; // int32
+  limit: number; // int32
+  size: number; // int32
+  _links: GenericLinks;
+}
+
+export interface ContentChildren {
+  attachment?: ContentArray;
+  comment?: ContentArray;
+  page?: ContentArray;
+  _expandable: any;
+  _links: GenericLinks;
+}
+
+export interface Container {
+  [key: string]: string;
+}
+
+export interface Icon {
+  path: string;
+  width: number; // int32
+  height: number; // int32
+  isDefault: boolean;
+}
+
+export interface SpacePermission {
+  subject: any;
+  operation: OperationCheckResult;
+  anonymousAccess: boolean;
+  unlicensedAccess: boolean;
+}
+
+export interface SpaceSettings {
+  routeOverrideEnabled: boolean;
+  _links: GenericLinks;
+}
+
+export interface ThemeNoLinks {
+  themeKey: string;
+  name: string;
+  description: string;
+  icon: Icon;
+  [key: string]: any;
+}
+
+export interface MenusLookAndFeel {
+  hoverOrFocus: any;
+  color: string;
+}
+
+export interface ButtonLookAndFeel {
+  backgroundColor: string;
+  color: string;
+}
+
+export interface NavigationLookAndFeel {
+  color: string;
+  hoverOrFocus: any;
+}
+
+export interface SearchFieldLookAndFeel {
+  backgroundColor: string;
+  color: string;
+}
+
+export interface HeaderLookAndFeel {
+  backgroundColor: string;
+  button: ButtonLookAndFeel;
+  primaryNavigation: NavigationLookAndFeel;
+  secondaryNavigation: NavigationLookAndFeel;
+  search: SearchFieldLookAndFeel;
+}
+
+export interface ScreenLookAndFeel {
+  background: string;
+  backgroundColor: string;
+  backgroundImage: string;
+  backgroundSize: string;
+  gutterTop: string;
+  gutterRight: string;
+  gutterBottom: string;
+  gutterLeft: string;
+}
+
+export interface ContainerLookAndFeel {
+  background: string;
+  backgroundColor: string;
+  backgroundImage: string;
+  backgroundSize: string;
+  padding: string;
+  borderRadius: string;
+}
+
+export interface ContentLookAndFeel {
+  screen: ScreenLookAndFeel;
+  container: ContainerLookAndFeel;
+  header: ContainerLookAndFeel;
+  body: ContainerLookAndFeel;
+}
+
+export interface LookAndFeel {
+  headings: any;
+  links: any;
+  menus: MenusLookAndFeel;
+  header: HeaderLookAndFeel;
+  content: ContentLookAndFeel;
+  bordersAndDividers: any;
+}
+
+export interface Space {
+  id: number; // int64
+  key: string;
+  name: string;
+  type: string;
+  status: string;
+  _expandable: any;
+  _links: GenericLinks;
+
+  icon?: Icon;
+  description?: any;
+  homepage?: Content;
+  metadata?: any;
+  operations?: OperationCheckResult[];
+  permissions?: SpacePermission;
+  setting?: SpaceSettings;
+  theme?: ThemeNoLinks;
+  lookAndFeel?: LookAndFeel;
+  history?: any;
+}
+
+export interface UserDetails {
+  business?: any;
+  personal?: any;
+}
+
+export interface User {
+  type: 'known' | 'unknown' | 'anonymous' | 'user';
+  accountId: string; // 384093:32b4d9w0-f6a5-3535-11a3-9c8c88d10192
+  accountType: 'atlassian' | 'app' | '';
+  email: string;
+  publicName: string;
+  profilePicture: Icon;
+  displayName: string;
+  _expandable: any;
+  _links: GenericLinks;
+
+  username?: string;
+  userKey?: string;
+  operations?: OperationCheckResult[];
+  details?: UserDetails;
+  personalSpace?: Space;
+}
+
+export interface UsersUserKeys {
+  users: User[];
+  userKeys: string[];
+  _links?: GenericLinks;
+}
+
+export interface Version {
+  by: User;
+  when: string; // date-time
+  friendlyWhen: string;
+  message: string;
+  number: number; // int32
+  minorEdit: boolean;
+  _expandable: any;
+  _links: GenericLinks;
+
+  content?: Content;
+  collaborators?: UsersUserKeys;
+}
+
+export interface ContentHistory {
+  latest: boolean;
+  createdBy: User;
+  createdDate: string; // date-time
+  lastUpdated?: Version;
+  previousVersion?: Version;
+  contributors?: any;
+  nextVersion?: Version;
+  _expandable?: any;
+  _links?: GenericLinks;
+}
+
 export interface Content {
   id: string;
   type: string;
   status: string;
   title: string;
-  space: {
-    id: number;
-    key: string;
-    name: string;
-    status: StatusType;
-  };
-  history: { };
-  version: {
-    by: { username: string; userKey: string; accountId: string; displayName: string; }
-    message: string;
-    number: number
-  };
+  _expandable: any;
+  _links: GenericLinks;
+
+  space?: Space;
+  history?: ContentHistory;
+  version?: Version;
   body?: ContentBody;
+  ancestors?: Content[];
+  operations?: OperationCheckResult[];
+  children?: ContentChildren;
+  childrenTypes?: ContentChildType;
+  descendants?: ContentChildren;
+  container?: Container;
+  restrictions?: any;
+
+  [key: string]: any;
 }
 
 export default class Confluency {
@@ -93,7 +299,7 @@ export default class Confluency {
 
   newRequest(method: string, uri: string, noRestApi?: boolean) {
     const prefix = !noRestApi && '/rest/api' || '';
-    const request: superagent.Request = this.client[method](this.compositeUri({prefix, uri}));
+    const request: superagent.Request = this.client[method](this.compositeUri({prefix, uri})).retry(2);
     if (this.authType === 'basic') {
       this.auth(request);
     }
@@ -108,8 +314,13 @@ export default class Confluency {
 
   async POST(uri: string, body) {
     await this.cookieAuth;
-    const data = await this.newRequest('post', uri).set('Content-Type', 'application/json').send(body);
-    return data.body;
+    try {
+      const data = await this.newRequest('post', uri).set('Content-Type', 'application/json').send(body);
+      return data.body;
+    } catch (e) {
+      console.log(e);
+    }
+
   }
 
   async PUT(uri: string, body) {
@@ -124,8 +335,12 @@ export default class Confluency {
 
   async DEL(uri: string) {
     await this.cookieAuth;
-    const data = await this.newRequest('del', uri);
-    return data.body;
+    try {
+      const data = await this.newRequest('del', uri);
+      return data.body;
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   createQueryString(parameters) {
@@ -150,8 +365,8 @@ export default class Confluency {
     return this.GET(uri);
   }
 
-  // https://developer.atlassian.com/cloud/confluence/rest/#api-content-id-child-type-get
-  async getChildren(pageId: string, {all= false, expand= []} = {}) {
+  // https://developer.atlassian.com/cloud/confluence/rest/api-group-content---children-and-descendants/#api-api-content-id-child-get
+  async getChildren(pageId: string, {all= false, expand= []} = {}): Promise<Content[]> {
     let uri = '/content/' + pageId + '/child/page';
     uri += this.createQueryString({ expand });
     if (all) return this._getPagesAll(uri);
@@ -200,7 +415,8 @@ export default class Confluency {
   }
 
   // https://developer.atlassian.com/cloud/confluence/rest/#api-content-post
-  create(opts: {space: string, title: string, content: string, parent?: string, representation?: RepresentationType}) {
+  create(opts: { space: string, title: string, content: string,
+                 parent?: string, representation?: RepresentationType }): Promise<Content> {
     const body: PostApiContentBody = {
       type: 'page',
       title: opts.title,
@@ -277,13 +493,13 @@ export default class Confluency {
     return body.results;
   }
 
-  // https://developer.atlassian.com/cloud/confluence/rest/#api-content-id-put
-  async changeParent(pageId: string, parentId: string) {
+  // https://developer.atlassian.com/cloud/confluence/rest/api-group-content/#api-api-content-id-put
+  async changeParent(pageId: string, parentId: string): Promise<Content> {
     const page = await this.getPage(pageId);
     const body: PutApiContentBody = {
       type: 'page',
       title: page.title,
-      version: {number: page.version.number + 1},
+      version: {number: page.version!.number + 1},
       ancestors: [{id: parentId}]
     };
     return this.PUT('/content/' + pageId, body);

@@ -15,7 +15,7 @@ describe('test simple write', function () {
     const page = await confluency.create({space, title, content});
     page.should.have.property('id');
     page.title.should.be.exactly('example');
-    page.space.key.should.be.exactly('CON');
+    page.space!.key.should.be.exactly('CON');
     await confluency.del(page.id);
     confluency.getPage(page.id).should.be.rejectedWith(/Not Found/);
   });
@@ -28,8 +28,8 @@ describe('test simple write', function () {
     const page = await confluency.create({space, title, content, parent});
     page.should.have.property('id');
     page.title.should.be.exactly(title);
-    page.space.key.should.be.exactly(space);
-    page.ancestors[2].should.have.property('id', parent);
+    page.space!.key.should.be.exactly(space);
+    page.ancestors![2].should.have.property('id', parent);
     await confluency.del(page.id);
     confluency.getPage(page.id).should.be.rejectedWith(/Not Found/);
   });

@@ -1,4 +1,4 @@
-# node-confluence [![NPM version][npm-image]][npm-url] ![Node.js CI](https://github.com/heycalmdown/node-confluence/workflows/Node.js%20CI/badge.svg) [![Dependency Status][depstat-image]][depstat-url] [![Coverage Status][coveralls-image]][coveralls-url]
+# node-confluence [![NPM version][npm-image]][npm-url] ![Node.js CI](https://github.com/heycalmdown/node-confluence/workflows/Node.js%20CI/badge.svg) [![Coverage Status][coveralls-image]][coveralls-url]
 
 
 
@@ -20,9 +20,6 @@ $ npm run babeltest # for developers
 
 [travis-url]: http://travis-ci.org/heycalmdown/node-confluence
 [travis-image]: https://secure.travis-ci.org/heycalmdown/node-confluence.png?branch=master
-
-[depstat-url]: https://david-dm.org/heycalmdown/node-confluence
-[depstat-image]: https://david-dm.org/heycalmdown/node-confluence.png
 
 [coveralls-url]: https://coveralls.io/github/heycalmdown/node-confluence?branch=master
 [coveralls-image]: https://coveralls.io/repos/github/heycalmdown/node-confluence/badge.svg?branch=master

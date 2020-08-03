@@ -17,7 +17,7 @@ describe('test simple write', function () {
     const page = await confluency.create({space, title, content});
 
     page.should.have.property('id');
-    page.title.should.be.exactly('example');
+    page.title.should.be.exactly(title);
     page.space!.key.should.be.exactly('CON');
     await confluency.del(page.id);
     confluency.getPage(page.id).should.be.rejectedWith(/Not Found/);

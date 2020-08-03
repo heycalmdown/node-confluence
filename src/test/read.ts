@@ -8,11 +8,14 @@ const confluency = new Confluency({ host, context });
 describe('test simple write', function () {
   this.timeout(10000);
 
+  const space = 'CON';
+  const SEED = Math.floor(Math.random() * 1000000).toString().padStart(7, '0');
+
   it('should create a page', async () => {
-    const space = 'CON';
-    const title = 'example';
+    const title = `${SEED} example`;
     const content = 'haha';
     const page = await confluency.create({space, title, content});
+
     page.should.have.property('id');
     page.title.should.be.exactly('example');
     page.space!.key.should.be.exactly('CON');
@@ -21,11 +24,11 @@ describe('test simple write', function () {
   });
 
   it('should create a child page', async () => {
-    const space = 'CON';
-    const title = 'example2';
+    const title = `${SEED} example2`;
     const content = 'haha';
-    const parent = '1081356';
+    const parent = '1164247255'; // https://confluency.atlassian.net/wiki/spaces/CON/pages/1164247255/Write+test
     const page = await confluency.create({space, title, content, parent});
+
     page.should.have.property('id');
     page.title.should.be.exactly(title);
     page.space!.key.should.be.exactly(space);

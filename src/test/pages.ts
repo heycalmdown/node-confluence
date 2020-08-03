@@ -1,7 +1,7 @@
-import * as Bluebird from 'bluebird';
 import * as _ from 'lodash';
 import 'should';
 import Confluency from '..';
+// import { cleaning } from './helper';
 
 const host = process.env.CONFLUENCE_HOST || 'https://confluency.atlassian.net';
 const context = process.env.CONFLUENCE_CONTEXT || 'wiki';
@@ -11,31 +11,26 @@ describe('test pages', function () {
   this.timeout(10000);
 
   const space = 'CON';
-  const parent = '1081356';
-  const pageIds: string[] = [];
-  before(() => {
-    function remember(page) {
-      pageIds.push(page.id);
-      return page;
-    }
-    return confluency.create({space, title: 'parent 1', content: 'parent 1', parent}).then(remember).then(page => {
-      return confluency.create({space, title: 'child', content: 'child', parent: page.id}).then(remember);
-    }).then(() => {
-      return confluency.create({space, title: 'parent 2', content: 'parent 2', parent}).then(remember);
-    }).catch(e => {
-      console.error(e);
-      throw e;
-    });
-  });
+  const SEED = Math.floor(Math.random() * 1000000).toString().padStart(7, '0');
+  const GRAND_PARENT_ID = '1164247255'; // https://confluency.atlassian.net/wiki/spaces/CON/pages/1164247255/Write+test
 
-  after(() => {
-    return Bluebird.each(pageIds, pageId => {
-      return confluency.del(pageId);
-    });
+  after(async () => {
+    // await cleaning(SEED);
   });
 
   it('should move a child', async () => {
-    const page = await confluency.changeParent(pageIds[1], pageIds[2]);
-    _.takeRight(page.ancestors, 1)[0].title.should.be.exactly('parent 2');
+    const parent1 = await confluency.create({ space,
+                                              parent: GRAND_PARENT_ID,
+                                              title: `${SEED} parent 1`,
+                                              content: 'parent 1'});
+    const parent2 = await confluency.create({ space,
+                                              parent: GRAND_PARENT_ID,
+                                              title: `${SEED} parent 2`,
+                                              content: 'parent 2'});
+    const child = await confluency.create({ space, title: `${SEED} child`, content: 'child', parent: parent1.id });
+
+    const page = await confluency.changeParent(child.id, parent2.id);
+
+    _.takeRight(page.ancestors, 1)[0].title.should.be.exactly(`${SEED} parent 2`);
   });
 });

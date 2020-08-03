@@ -27,6 +27,7 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm t
+    - run: npm run test-cov
 
     - name: Coveralls GitHub Action
       uses: coverallsapp/github-action@v1.1.1

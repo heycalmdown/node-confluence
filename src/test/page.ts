@@ -13,7 +13,7 @@ describe('test a page', function () {
   const space = 'CON';
   const title = `${SEED} page test`;
   const content = 'hoho';
-  const parent = '1164247255'; // https://confluency.atlassian.net/wiki/spaces/CON/pages/1164247255/Write+test
+  const parent = '1191313514'; // https://confluency.atlassian.net/wiki/spaces/CON/pages/1191313514/Write+test
   let pageId: string;
   before(async () => {
     const page = await confluency.create({ space, title, content, parent });

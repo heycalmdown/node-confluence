@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import 'should';
 import Confluency from '..';
-// import { cleaning } from './helper';
+import { cleaning } from './helper';
 
 const host = process.env.CONFLUENCE_HOST || 'https://confluency.atlassian.net';
 const context = process.env.CONFLUENCE_CONTEXT || 'wiki';
@@ -12,10 +12,11 @@ describe('test pages', function () {
 
   const space = 'CON';
   const SEED = Math.floor(Math.random() * 1000000).toString().padStart(7, '0');
-  const GRAND_PARENT_ID = '1164247255'; // https://confluency.atlassian.net/wiki/spaces/CON/pages/1164247255/Write+test
+  const GRAND_PARENT_ID = '1191313514'; // https://confluency.atlassian.net/wiki/spaces/CON/pages/1191313514/Write+test
 
   after(async () => {
-    // await cleaning(SEED);
+    await cleaning(SEED);
+    await cleaning(SEED); // for recursive
   });
 
   it('should move a child', async () => {

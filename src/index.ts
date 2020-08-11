@@ -299,7 +299,7 @@ export default class Confluency {
 
   newRequest(method: string, uri: string, noRestApi?: boolean) {
     const prefix = !noRestApi && '/rest/api' || '';
-    const request: superagent.Request = this.client[method](this.compositeUri({prefix, uri})).retry(2);
+    const request: superagent.Request = this.client[method](this.compositeUri({prefix, uri})).retry(3);
     if (this.authType === 'basic') {
       this.auth(request);
     }
@@ -365,6 +365,7 @@ export default class Confluency {
     return this.GET(uri);
   }
 
+  // tslint:disable-next-line: max-line-length
   // https://developer.atlassian.com/cloud/confluence/rest/api-group-content---children-and-descendants/#api-api-content-id-child-get
   async getChildren(pageId: string, {all= false, expand= []} = {}): Promise<Content[]> {
     let uri = '/content/' + pageId + '/child/page';
@@ -486,10 +487,14 @@ export default class Confluency {
     }));
   }
 
-  // https://developer.atlassian.com/cloud/confluence/rest/#api-content-search-get
-  async search(cql: string, opts?: {limit: number}) {
-    const query = {cql, limit: opts && opts.limit};
-    const body = await this.GET('/content/search' + url.format({query}));
+  // https://developer.atlassian.com/cloud/confluence/rest/api-group-content/#api-api-content-search-get
+  async search(cql: string, opts: {limit?: number, expand?: string[]} = {}) {
+    const query = this.createQueryString({
+      cql,
+      limit: opts.limit,
+      expand: opts.expand
+    });
+    const body = await this.GET('/content/search' + query);
     return body.results;
   }
 

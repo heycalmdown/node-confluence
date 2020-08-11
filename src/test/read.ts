@@ -26,7 +26,7 @@ describe('test simple write', function () {
   it('should create a child page', async () => {
     const title = `${SEED} example2`;
     const content = 'haha';
-    const parent = '1164247255'; // https://confluency.atlassian.net/wiki/spaces/CON/pages/1164247255/Write+test
+    const parent = '1191313514'; // https://confluency.atlassian.net/wiki/spaces/CON/pages/1191313514/Write+test
     const page = await confluency.create({space, title, content, parent});
 
     page.should.have.property('id');

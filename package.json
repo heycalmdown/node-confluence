@@ -15,11 +15,17 @@
     "@types/lodash": "4.14.158",
     "@types/mocha": "8.0.3",
     "@types/superagent": "4.1.4",
+    "@typescript-eslint/eslint-plugin": "^3.10.1",
+    "@typescript-eslint/parser": "^4.0.1",
+    "eslint": "^7.8.1",
+    "eslint-config-airbnb-typescript": "^9.0.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-prefer-arrow": "^1.2.2",
     "isparta": "4.1.0",
     "mocha": "",
     "should": "13.2.3",
     "supertest": "",
-    "tslint": "5.11.0",
+    "tslint": "^5.20.1",
     "typescript": "3.9.7"
   },
   "optionalDependencies": {},
@@ -31,9 +37,6 @@
     "build": "tsc",
     "test": "mocha lib/test",
     "test-cov": "isparta cover _mocha -- lib/test",
-    "prepublishOnly": "npm run build",
-    "snyk-protect": "snyk protect",
-    "prepare": "npm run snyk-protect"
-  },
-  "snyk": true
+    "prepublishOnly": "npm run build"
+  }
 }

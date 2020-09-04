@@ -14,11 +14,11 @@ describe('test simple write', function () {
   it('should create a page', async () => {
     const title = `${SEED} example`;
     const content = 'haha';
-    const page = await confluency.create({space, title, content});
+    const page = await confluency.create({ space, title, content });
 
     page.should.have.property('id');
     page.title.should.be.exactly(title);
-    page.space!.key.should.be.exactly('CON');
+    page.space?.key.should.be.exactly('CON');
     await confluency.del(page.id);
     confluency.getPage(page.id).should.be.rejectedWith(/Not Found/);
   });
@@ -27,11 +27,14 @@ describe('test simple write', function () {
     const title = `${SEED} example2`;
     const content = 'haha';
     const parent = '1191313514'; // https://confluency.atlassian.net/wiki/spaces/CON/pages/1191313514/Write+test
-    const page = await confluency.create({space, title, content, parent});
+    const page = await confluency.create({
+      space, title, content, parent,
+    });
 
     page.should.have.property('id');
     page.title.should.be.exactly(title);
-    page.space!.key.should.be.exactly(space);
+    page.space?.key.should.be.exactly(space);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     page.ancestors![2].should.have.property('id', parent);
     await confluency.del(page.id);
     confluency.getPage(page.id).should.be.rejectedWith(/Not Found/);

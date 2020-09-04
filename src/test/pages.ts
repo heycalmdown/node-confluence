@@ -20,15 +20,21 @@ describe('test pages', function () {
   });
 
   it('should move a child', async () => {
-    const parent1 = await confluency.create({ space,
-                                              parent: GRAND_PARENT_ID,
-                                              title: `${SEED} parent 1`,
-                                              content: 'parent 1'});
-    const parent2 = await confluency.create({ space,
-                                              parent: GRAND_PARENT_ID,
-                                              title: `${SEED} parent 2`,
-                                              content: 'parent 2'});
-    const child = await confluency.create({ space, title: `${SEED} child`, content: 'child', parent: parent1.id });
+    const parent1 = await confluency.create({
+      space,
+      parent: GRAND_PARENT_ID,
+      title: `${SEED} parent 1`,
+      content: 'parent 1',
+    });
+    const parent2 = await confluency.create({
+      space,
+      parent: GRAND_PARENT_ID,
+      title: `${SEED} parent 2`,
+      content: 'parent 2',
+    });
+    const child = await confluency.create({
+      space, title: `${SEED} child`, content: 'child', parent: parent1.id,
+    });
 
     const page = await confluency.changeParent(child.id, parent2.id);
 

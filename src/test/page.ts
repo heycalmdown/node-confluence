@@ -16,7 +16,9 @@ describe('test a page', function () {
   const parent = '1191313514'; // https://confluency.atlassian.net/wiki/spaces/CON/pages/1191313514/Write+test
   let pageId: string;
   before(async () => {
-    const page = await confluency.create({ space, title, content, parent });
+    const page = await confluency.create({
+      space, title, content, parent,
+    });
     pageId = page.id;
   });
 
@@ -56,7 +58,7 @@ describe('test a page', function () {
       id: pageId,
       content: 'updated content',
       parent: undefined,
-      version: 2
+      version: 2,
     });
     const page = await confluency.getPage(pageId, ['body.storage']);
 

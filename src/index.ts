@@ -35,7 +35,7 @@ interface PostApiContentBody extends BaseApiContentBody {
 }
 
 interface PutApiContentBody extends BaseApiContentBody {
-  version: { number: number };
+  version: { 'number': number };
   body?: ContentBody;
 }
 
@@ -95,11 +95,11 @@ export interface SpaceSettings {
 }
 
 export interface ThemeNoLinks {
+  [key: string]: any;
   themeKey: string;
   name: string;
   description: string;
   icon: Icon;
-  [key: string]: any;
 }
 
 export interface MenusLookAndFeel {
@@ -221,7 +221,7 @@ export interface Version {
   when: string; // date-time
   friendlyWhen: string;
   message: string;
-  number: number; // int32
+  'number': number; // int32
   minorEdit: boolean;
   _expandable: any;
   _links: GenericLinks;
@@ -243,6 +243,8 @@ export interface ContentHistory {
 }
 
 export interface Content {
+  [key: string]: any;
+
   id: string;
   type: string;
   status: string;
@@ -261,27 +263,31 @@ export interface Content {
   descendants?: ContentChildren;
   container?: Container;
   restrictions?: any;
-
-  [key: string]: any;
 }
 
 export default class Confluency {
   private host: string;
+
   private context: string;
+
   private username?: string;
+
   private password?: string;
+
   private authType?: 'cookie' | 'basic' | 'no';
+
   private client: superagent.SuperAgent<superagent.SuperAgentRequest>;
+
   private cookieAuth: Bluebird<void>;
 
-  constructor(opts: {host: string, context?: string, username?: string, password?: string, authType?: AuthType}) {
+  constructor(opts: {host: string; context?: string; username?: string; password?: string; authType?: AuthType}) {
     this.host = opts.host;
     opts.context = opts.context || '';
-    if (opts.context.length && opts.context[0] !== '/') opts.context = '/' + opts.context;
+    if (opts.context.length && opts.context[0] !== '/') opts.context = `/${opts.context}`;
     this.context = opts.context;
     this.username = opts.username;
     this.password = opts.password;
-    this.authType = opts.authType || opts.username && 'basic' || 'no';
+    this.authType = opts.authType || (opts.username && 'basic') || 'no';
     if (this.authType === 'basic' && !(opts.username && opts.password)) {
       throw new Error('BasicAuth needs both of username and password');
     }
@@ -290,7 +296,22 @@ export default class Confluency {
     this.cookieAuth = this.makeCookieAuthPromise();
   }
 
-  compositeUri({prefix, uri}) {
+  static createQueryString(parameters) {
+    Object.keys(parameters).forEach(key => {
+      if (Array.isArray(parameters[key])) {
+        parameters[key] = parameters[key].join(',');
+      }
+
+      if (!parameters[key] && typeof parameters[key] !== 'number') {
+        delete parameters[key];
+      }
+    });
+    return url.format({
+      query: parameters,
+    });
+  }
+
+  compositeUri({ prefix, uri }) {
     if (uri.slice(0, prefix.length) === prefix) {
       prefix = '';
     }
@@ -298,8 +319,8 @@ export default class Confluency {
   }
 
   newRequest(method: string, uri: string, noRestApi?: boolean) {
-    const prefix = !noRestApi && '/rest/api' || '';
-    const request: superagent.Request = this.client[method](this.compositeUri({prefix, uri})).retry(3);
+    const prefix = (!noRestApi && '/rest/api') || '';
+    const request: superagent.Request = this.client[method](this.compositeUri({ prefix, uri })).retry(3);
     if (this.authType === 'basic') {
       this.auth(request);
     }
@@ -320,7 +341,7 @@ export default class Confluency {
     } catch (e) {
       console.log(e);
     }
-
+    return {};
   }
 
   async PUT(uri: string, body) {
@@ -331,6 +352,7 @@ export default class Confluency {
     } catch (e) {
       console.error(e);
     }
+    return {};
   }
 
   async DEL(uri: string) {
@@ -341,35 +363,21 @@ export default class Confluency {
     } catch (e) {
       console.log(e);
     }
-  }
-
-  createQueryString(parameters) {
-    Object.keys(parameters).forEach(key => {
-      if (Array.isArray(parameters[key])) {
-        parameters[key] = parameters[key].join(',');
-      }
-
-      if (!parameters[key] && typeof parameters[key] !== 'number') {
-        delete parameters[key];
-      }
-    });
-    return url.format({
-      query: parameters
-    });
+    return {};
   }
 
   // https://developer.atlassian.com/cloud/confluence/rest/#api-content-get
   async getPage(pageId: string, expand?: string[]): Promise<Content> {
-    let uri = '/content/' + pageId;
-    uri += this.createQueryString({ expand });
+    let uri = `/content/${pageId}`;
+    uri += Confluency.createQueryString({ expand });
     return this.GET(uri);
   }
 
-  // tslint:disable-next-line: max-line-length
+  // eslint-disable-next-line max-len
   // https://developer.atlassian.com/cloud/confluence/rest/api-group-content---children-and-descendants/#api-api-content-id-child-get
-  async getChildren(pageId: string, {all= false, expand= []} = {}): Promise<Content[]> {
-    let uri = '/content/' + pageId + '/child/page';
-    uri += this.createQueryString({ expand });
+  async getChildren(pageId: string, { all = false, expand = [] } = {}): Promise<Content[]> {
+    let uri = `/content/${pageId}/child/page`;
+    uri += Confluency.createQueryString({ expand });
     if (all) return this._getPagesAll(uri);
     const body = await this.GET(uri);
     return body.results;
@@ -384,12 +392,14 @@ export default class Confluency {
   }
 
   // https://developer.atlassian.com/cloud/confluence/rest/#api-space-spaceKey-content-get
-  async getPages(spaceKey: string, opts: {all: boolean, limit: number, expand?: string[]} = { all: false, limit: 25 }) {
-    const query = '/space/' + spaceKey + '/content/page';
-    if (opts.all) return this._getPagesAll(query + this.createQueryString({
-      limit: opts.limit,
-      expand: opts.expand
-    }));
+  async getPages(spaceKey: string, opts: {all: boolean; limit: number; expand?: string[]} = { all: false, limit: 25 }) {
+    const query = `/space/${spaceKey}/content/page`;
+    if (opts.all) {
+      return this._getPagesAll(query + Confluency.createQueryString({
+        limit: opts.limit,
+        expand: opts.expand,
+      }));
+    }
     const body = await this.GET(query);
     return body.results;
   }
@@ -402,75 +412,77 @@ export default class Confluency {
   }
 
   // https://developer.atlassian.com/cloud/confluence/rest/#api-space-get
-  async getSpaces(opts: {all: boolean, limit: number} = {all: false, limit: 25}) {
-    if (opts.all) return this._getSpacesAll('/space' + this.createQueryString({
-      limit: opts.limit
-    }));
+  async getSpaces(opts: {all: boolean; limit: number} = { all: false, limit: 25 }) {
+    if (opts.all) {
+      return this._getSpacesAll(`/space${Confluency.createQueryString({
+        limit: opts.limit,
+      })}`);
+    }
     const body = await this.GET('/space');
     return body.results;
   }
 
   // https://developer.atlassian.com/cloud/confluence/rest/#api-space-spaceKey-get
   getSpace(spaceKey: string) {
-    return this.GET('/space/' + spaceKey);
+    return this.GET(`/space/${spaceKey}`);
   }
 
   // https://developer.atlassian.com/cloud/confluence/rest/#api-content-post
-  create(opts: { space: string, title: string, content: string,
-                 parent?: string, representation?: RepresentationType }): Promise<Content> {
+  create(opts: { space: string; title: string; content: string;
+    parent?: string; representation?: RepresentationType; }): Promise<Content> {
     const body: PostApiContentBody = {
       type: 'page',
       title: opts.title,
-      space: {key: opts.space},
+      space: { key: opts.space },
       body: {
         storage: {
           value: opts.content,
-          representation: opts.representation || 'storage'
-        }
-      }
+          representation: opts.representation || 'storage',
+        },
+      },
     };
     if (opts.parent) {
-      body.ancestors = [{id: opts.parent}];
+      body.ancestors = [{ id: opts.parent }];
     }
     return this.POST('/content', body);
   }
 
   // https://developer.atlassian.com/cloud/confluence/rest/#api-content-id-put
-  update(opts: { id: string, title: string, content: string, version: number,
-                 parent?: string, representation?: RepresentationType
-      }) {
+  update(opts: { id: string; title: string; content: string; version: number;
+    parent?: string; representation?: RepresentationType;
+  }) {
     const body: PutApiContentBody = {
       type: 'page',
       title: opts.title,
       version: {
-        number: opts.version
+        number: opts.version,
       },
       body: {
         storage: {
           value: opts.content,
-          representation: opts.representation || 'storage'
-        }
-      }
+          representation: opts.representation || 'storage',
+        },
+      },
     };
     if (opts.parent) {
-      body.ancestors = [{id: opts.parent}];
+      body.ancestors = [{ id: opts.parent }];
     }
-    return this.PUT('/content/' + opts.id, body);
+    return this.PUT(`/content/${opts.id}`, body);
   }
 
   // https://developer.atlassian.com/cloud/confluence/rest/#api-content-id-delete
   del(pageId: string) {
-    return this.DEL('/content/' + pageId);
+    return this.DEL(`/content/${pageId}`);
   }
 
   // https://developer.atlassian.com/cloud/confluence/rest/#api-content-id-label-post
   tagLabel(pageId: string, label: string) {
-    return this.POST(`/content/${pageId}/label`, [{prefix: 'global', name: label}]);
+    return this.POST(`/content/${pageId}/label`, [{ prefix: 'global', name: label }]);
   }
 
   // https://developer.atlassian.com/cloud/confluence/rest/#api-content-id-label-post
   tagLabels(pageId: string, labels: string[]) {
-    const labelObjects = labels.map(label => ({prefix: 'global', name: label}));
+    const labelObjects = labels.map(label => ({ prefix: 'global', name: label }));
     return this.POST(`/content/${pageId}/label`, labelObjects);
   }
 
@@ -482,19 +494,19 @@ export default class Confluency {
 
   // https://developer.atlassian.com/cloud/confluence/rest/#api-content-id-label-delete
   untagLabel(pageId: string, label: string) {
-    return this.DEL(`/content/${pageId}/label` + this.createQueryString({
-      name: label
-    }));
+    return this.DEL(`/content/${pageId}/label${Confluency.createQueryString({
+      name: label,
+    })}`);
   }
 
   // https://developer.atlassian.com/cloud/confluence/rest/api-group-content/#api-api-content-search-get
-  async search(cql: string, opts: {limit?: number, expand?: string[]} = {}) {
-    const query = this.createQueryString({
+  async search(cql: string, opts: {limit?: number; expand?: string[]} = {}) {
+    const query = Confluency.createQueryString({
       cql,
       limit: opts.limit,
-      expand: opts.expand
+      expand: opts.expand,
     });
-    const body = await this.GET('/content/search' + query);
+    const body = await this.GET(`/content/search${query}`);
     return body.results;
   }
 
@@ -504,38 +516,36 @@ export default class Confluency {
     const body: PutApiContentBody = {
       type: 'page',
       title: page.title,
-      version: {number: page.version!.number + 1},
-      ancestors: [{id: parentId}]
+      version: { number: page.version!.number + 1 },
+      ancestors: [{ id: parentId }],
     };
-    return this.PUT('/content/' + pageId, body);
+    return this.PUT(`/content/${pageId}`, body);
   }
 
   // https://developer.atlassian.com/cloud/confluence/rest/#api-contentbody-convert-to-post
   async convertWikiMarkup(content) {
     const body = await this.POST('/contentbody/convert/storage', {
       value: content,
-      representation: 'wiki'
+      representation: 'wiki',
     });
     return body.value;
   }
 
   private auth(request: superagent.Request) {
-    const tok = this.username + ':' + this.password;
-    const hash =  new Buffer(tok, 'binary').toString('base64');
-    request.set('Authorization', 'Basic ' + hash);
+    const tok = `${this.username}:${this.password}`;
+    const hash = Buffer.from(tok, 'binary').toString('base64');
+    request.set('Authorization', `Basic ${hash}`);
     return request;
   }
 
   private makeCookieAuthPromise() {
     if (this.authType !== 'cookie') return Bluebird.resolve();
-    return Bluebird.resolve().then(() => {
-      return this.client.post(this.compositeUri({prefix: '', uri: '/login.action'}))
-        .type('form')
-        .send({ os_username: this.username, os_password: this.password })
-        .then(o => o.body)
-        .catch(e => {
-          throw new Error('CookieAuth has failed');
-        });
-    });
+    return Bluebird.resolve().then(() => this.client.post(this.compositeUri({ prefix: '', uri: '/login.action' }))
+      .type('form')
+      .send({ os_username: this.username, os_password: this.password })
+      .then(o => o.body)
+      .catch(e => {
+        throw new Error('CookieAuth has failed');
+      }));
   }
 }

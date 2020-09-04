@@ -19,7 +19,7 @@
     "mocha": "",
     "should": "13.2.3",
     "supertest": "",
-    "tslint": "5.11.0",
+    "tslint": "5.20.1",
     "typescript": "3.9.7"
   },
   "optionalDependencies": {},

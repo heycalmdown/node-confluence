@@ -20,7 +20,7 @@
     "eslint-config-airbnb-typescript": "9.0.0",
     "eslint-plugin-import": "2.22.0",
     "eslint-plugin-prefer-arrow": "1.2.2",
-    "isparta": "4.1.0",
+    "isparta": "4.1.1",
     "mocha": "",
     "should": "13.2.3",
     "supertest": "",

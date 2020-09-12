@@ -16,7 +16,7 @@
     "@types/superagent": "4.1.10",
     "@typescript-eslint/eslint-plugin": "4.1.0",
     "@typescript-eslint/parser": "4.1.0",
-    "eslint": "7.8.1",
+    "eslint": "7.9.0",
     "eslint-config-airbnb-typescript": "9.0.0",
     "eslint-plugin-import": "2.22.0",
     "eslint-plugin-prefer-arrow": "1.2.2",

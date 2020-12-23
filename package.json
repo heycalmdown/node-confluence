@@ -11,7 +11,7 @@
   "main": "lib/index.js",
   "devDependencies": {
     "@types/bluebird": "3.5.32",
-    "@types/lodash": "4.14.162",
+    "@types/lodash": "4.14.166",
     "@types/mocha": "8.2.0",
     "@types/superagent": "4.1.10",
     "@typescript-eslint/eslint-plugin": "4.7.0",

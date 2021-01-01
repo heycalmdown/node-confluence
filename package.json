@@ -3,14 +3,14 @@
   "name": "confluency",
   "version": "0.10.0",
   "dependencies": {
-    "bluebird": "3.5.3",
+    "bluebird": "3.7.2",
     "lodash": "4.17.19",
     "superagent": "5.3.1"
   },
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "devDependencies": {
-    "@types/bluebird": "3.5.32",
+    "@types/bluebird": "3.5.33",
     "@types/lodash": "4.14.166",
     "@types/mocha": "8.2.0",
     "@types/superagent": "4.1.10",

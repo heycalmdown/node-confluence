@@ -6,7 +6,7 @@ const context = process.env.CONFLUENCE_CONTEXT || 'wiki';
 const confluency = new Confluency({ host, context });
 
 describe('test readonly actions', function () {
-  this.timeout(10000);
+  this.timeout(50000);
 
   const READ_TEST = '1191215258'; // https://confluency.atlassian.net/wiki/spaces/CON/pages/1191215258/Read+test
 

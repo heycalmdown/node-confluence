@@ -10,7 +10,7 @@
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "devDependencies": {
-    "@types/bluebird": "3.5.33",
+    "@types/bluebird": "3.5.34",
     "@types/lodash": "4.14.168",
     "@types/mocha": "8.2.0",
     "@types/superagent": "4.1.10",

@@ -18,7 +18,7 @@
     "@typescript-eslint/parser": "4.28.5",
     "eslint": "7.16.0",
     "eslint-config-airbnb-typescript": "12.3.1",
-    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-import": "2.29.1",
     "eslint-plugin-prefer-arrow": "1.2.3",
     "isparta": "4.1.1",
     "mocha": "",
